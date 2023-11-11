@@ -6,7 +6,11 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      screens: {
+        '2xs': {'max': '400px'},
+      }
+    },
   },
   plugins: [daisyui],
   daisyui: {

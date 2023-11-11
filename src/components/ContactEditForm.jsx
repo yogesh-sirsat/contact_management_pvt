@@ -20,7 +20,7 @@ function ContactEditForm({ selectedContact, saveEditedContact }) {
               {key === "Gender" ? (
                 <select
                   defaultValue="Not Selected"
-                  className="select"
+                  className="select 2xs:select-sm"
                   onChange={(e) => {
                     setEditedContact({
                       ...editedContact,
@@ -37,7 +37,7 @@ function ContactEditForm({ selectedContact, saveEditedContact }) {
                 </select>
               ) : key === "Notes" ? (
                 <textarea
-                  className="textarea"
+                  className="textarea 2xs:textarea-sm"
                   placeholder={`Type ${key} here...`}
                   value={value}
                   onChange={(e) => {

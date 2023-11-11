@@ -10,7 +10,7 @@ function ContactCard({ contact, id, isSelectedContact, onContactClick }) {
       }}
     >
       <div className="avatar">
-        <div className="w-12 h-12 rounded-full border-2 border-secondary">
+        <div className="w-12 h-12 rounded-full">
           <img
             src={`https://robohash.org/${contact["E-mail Address"]}/set_set1/bgset_bg1/size=36x36.png?ignoreext=true`}
           />

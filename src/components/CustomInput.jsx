@@ -20,7 +20,7 @@ function CustomInput({ inputLabel, className, placeholder, value, onChange }) {
     return (
         <input
             type={type}
-            className={className}
+            className={"2xs:input-sm " + className}
             placeholder={placeholder}
             value={value}
             onChange={onChange}
