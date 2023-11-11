@@ -98,15 +98,15 @@ function App() {
           selectedContact ? "hidden lg:flex" : "flex"
         } flex-col bg-base-200 overflow-auto shadow-xl rounded-xl`}
       >
-        <header className="flex flex-row sticky shadow-md bg-secondary">
-          <h1 className="text-2xl m-2 mr-0">Contacts List</h1>
+        <header className="flex flex-row shadow-md bg-secondary">
+          <h1 className="break-words 2xs:text-xl text-2xl m-2 mr-0">Contacts List</h1>
           <div className="dropdown">
-            <label tabIndex={0} className="btn btn-sm mt-2.5 btn-ghost">
+            <label tabIndex={0} className="btn btn-sm mt-2 btn-ghost">
               <ThemesIcon className={"w-6 h-6"} />
             </label>
             <div
               tabIndex={0}
-              className="dropdown-content z-[1] menu p-3 shadow bg-base-200 rounded-box w-52"
+              className="dropdown-content z-[1] menu p-3 shadow bg-base-200 rounded-box 2xs:w-36 w-52"
             >
               <div className="form-control w-full max-w-xs">
                 <label className="label">

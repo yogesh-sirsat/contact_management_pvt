@@ -9,13 +9,13 @@ function ContactCard({ contact, id, isSelectedContact, onContactClick }) {
         onContactClick(contact);
       }}
     >
-      <div className="avatar">
+      <picture className="avatar">
         <div className="w-12 h-12 rounded-full">
           <img
             src={`https://robohash.org/${contact["E-mail Address"]}/set_set1/bgset_bg1/size=36x36.png?ignoreext=true`}
           />
         </div>
-      </div>
+      </picture>
       <summary className="break-all">
         <p>
           {contact["First Name"] + " " + contact["Last Name"]}{" "}
