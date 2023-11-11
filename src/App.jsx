@@ -1,17 +1,19 @@
 import { useEffect, useState } from "react";
-import "./App.css";
 import DisplayedContactList from "./components/DisplayedContactList";
-import EditIcon from "./components/Icons/EditIcon";
 import ContactEditForm from "./components/ContactEditForm";
+import EditIcon from "./components/Icons/EditIcon";
 import SaveIcon from "./components/Icons/SaveIcon";
 import CrossIcon from "./components/Icons/CrossIcon";
 import ArrowLeft from "./components/Icons/ArrowLeft";
+import { themeChange } from "theme-change";
+import ThemesIcon from "./components/Icons/ThemesIcons";
 
 function App() {
   const [contactListData, setContactListData] = useState([]);
   const [displayedContactList, setDisplayedContactList] = useState([]);
   const [selectedContact, setSelectedContact] = useState(null);
   const [isContactEdit, setIsContactEdit] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const fetchContactList = async () => {
     try {
@@ -25,26 +27,47 @@ function App() {
         throw new Error("Failed to load data");
       }
       const data = await response.json();
-      // Adding id to uniquely identify each contact
+      // Adding id based on index to uniquely identify each contact
       const dataWithIds = data.map((contact, index) => ({
         ...contact,
         id: index + 1,
       }));
       setContactListData(dataWithIds);
       setDisplayedContactList(dataWithIds);
-      // setSelectedContact(dataWithIds[0]);
     } catch (error) {
       console.error("Error getting contacts:", error);
     }
   };
 
   useEffect(() => {
+    themeChange(false);
     fetchContactList();
   }, []);
 
   useEffect(() => {
     setDisplayedContactList(contactListData);
   }, [contactListData]);
+
+  useEffect(() => {
+    const searchContacts = (query) => {
+      const lowerCaseQuery = query.toLowerCase();
+      setDisplayedContactList(
+        contactListData.filter((contact) =>
+          Object.values(contact).some((field) =>
+            String(field).toLowerCase().includes(lowerCaseQuery)
+          )
+        )
+      );
+    };
+
+    // Debounce the search function
+    const debounceSearch = setTimeout(() => {
+      searchContacts(searchQuery);
+    }, 300);
+
+    // Clean up the timeout on each input change
+    return () => clearTimeout(debounceSearch);
+  }, [searchQuery, contactListData]);
 
   const onContactClick = (contact) => {
     setSelectedContact(contact);
@@ -54,21 +77,6 @@ function App() {
   const onArrowLeftClick = () => {
     setSelectedContact(null);
     setIsContactEdit(false);
-  }
-
-  const handleSearchQuery = (e) => {
-    const search_query = e.target.value.toLowerCase();
-    setDisplayedContactList(
-      contactListData.filter((contact) => {
-        return (
-          contact["First Name"].toLowerCase().includes(search_query) ||
-          contact["Last Name"].toLowerCase().includes(search_query) ||
-          contact["Home Phone"].includes(search_query) ||
-          contact["Display Name"].toLowerCase().includes(search_query) ||
-          contact["E-mail Address"].includes(search_query)
-        );
-      })
-    );
   };
 
   const saveEditedContact = (e, editedContact) => {
@@ -83,7 +91,7 @@ function App() {
   };
 
   return (
-    <main className={"container mx-auto grid lg:grid-cols-2 p-3 h-screen"}>
+    <main className="container mx-auto grid lg:grid-cols-2 p-3 h-screen">
       <section
         id="contact-list"
         className={`relative ${
@@ -91,13 +99,42 @@ function App() {
         } flex-col bg-base-200 overflow-auto shadow-xl rounded-xl`}
       >
         <header className="flex flex-row sticky shadow-md bg-secondary">
-          <h1 className="text-2xl m-2">Contacts List</h1>
-          <div className="flex flex-row ml-auto mr-2 w-1/2">
+          <h1 className="text-2xl m-2 mr-0">Contacts List</h1>
+          <div className="dropdown">
+            <label tabIndex={0} className="btn btn-sm mt-2.5 btn-ghost">
+              <ThemesIcon className={"w-6 h-6"} />
+            </label>
+            <div
+              tabIndex={0}
+              className="dropdown-content z-[1] menu p-3 shadow bg-base-200 rounded-box w-52"
+            >
+              <div className="form-control w-full max-w-xs">
+                <label className="label">
+                  <span className="label-text">Pick the theme!</span>
+                </label>
+                <select
+                  data-choose-theme
+                  className="select"
+                  defaultValue="forest"
+                >
+                  <option value="forest">Forest</option>
+                  <option value="black">Black</option>
+                  <option value="night">Night</option>
+                  <option value="business">Bussiness</option>
+                  <option value="pastel">Pastel </option>
+                  <option value="wireframe">Wireframe </option>
+                  <option value="luxury">Luxury </option>
+                  <option value="dracula">dracula </option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div className="flex flex-row ml-auto mr-2 w-2/5">
             <input
               type="text"
               placeholder="Search Contacts"
-              className="input input-ghost input-sm bg-neutral w-full my-2"
-              onChange={(e) => handleSearchQuery(e)}
+              className="input input-sm w-full my-2"
+              onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
         </header>
@@ -114,7 +151,10 @@ function App() {
         } flex-col bg-base-200 overflow-auto shadow-xl rounded-xl`}
       >
         <header className="sticky flex flex-row shadow-md bg-secondary">
-          <button className="lg:hidden btn btn-ghost btn-sm mt-2" onClick={onArrowLeftClick}>
+          <button
+            className="lg:hidden btn btn-ghost btn-sm mt-2"
+            onClick={onArrowLeftClick}
+          >
             <ArrowLeft className={"w-6 h-6"} />
           </button>
           <h1 className="text-2xl my-2 lg:m-2">
@@ -129,34 +169,28 @@ function App() {
                   <button
                     form="contact-edit-form"
                     type="submit"
-                    className="btn btn-sm btn-primary"
+                    className="btn btn-sm btn-success"
                   >
                     <SaveIcon className="w-6 h-6" />
-                    <span className="2xs:hidden">
-                      Save
-                    </span>
+                    <span className="2xs:hidden">Save</span>
                   </button>
                   <button
                     form="contact-edit-form"
                     type="reset"
-                    className="btn btn-sm btn-secondary"
+                    className="btn btn-sm btn-error"
                     onClick={() => setIsContactEdit(false)}
                   >
                     <CrossIcon className="w-6 h-6" />
-                    <span className="2xs:hidden">
-                      Cancel
-                    </span>
+                    <span className="2xs:hidden">Cancel</span>
                   </button>
                 </div>
               ) : (
                 <button
-                  className="btn btn-sm btn-secondary absolute right-0 top-0 m-2 z-10"
+                  className="btn btn-sm btn-info absolute right-0 top-0 m-2 z-10"
                   onClick={() => setIsContactEdit(true)}
                 >
                   <EditIcon className="w-6 h-6" />
-                  <span className="2xs:hidden">
-                    Edit
-                  </span>
+                  <span className="2xs:hidden">Edit</span>
                 </button>
               )}
               <picture className="avatar justify-center">

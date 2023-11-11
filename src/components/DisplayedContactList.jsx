@@ -10,7 +10,7 @@ function DisplayedContactList({
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
 
-  const CONTACTS_PER_PAGE = 20;
+  const CONTACTS_PER_PAGE = 15;
 
   const handleScroll = (contact_list_container) => {
     const isBottomReached = (
@@ -18,7 +18,6 @@ function DisplayedContactList({
         contact_list_container.scrollTop -
         contact_list_container.clientHeight <=
       100);
-    console.log(isBottomReached);
     if (isBottomReached && currentPage < totalPages) {
       setCurrentPage(currentPage + 1);
     }

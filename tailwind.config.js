@@ -1,20 +1,25 @@
 /** @type {import('tailwindcss').Config} */
-import daisyui from 'daisyui'
+import daisyui from "daisyui";
 export default {
-  content: [
-    "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",
-  ],
+  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
       screens: {
-        '2xs': {'max': '400px'},
-      }
+        "2xs": { max: "400px" },
+      },
     },
   },
   plugins: [daisyui],
   daisyui: {
-    themes: ["light", "dark", "emerald", "forest"],
+    themes: [
+      "forest",
+      "black",
+      "pastel",
+      "wireframe",
+      "luxury",
+      "dracula",
+      "business",
+      "night",
+    ],
   },
-}
-
+};
